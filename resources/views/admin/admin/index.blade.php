@@ -1,0 +1,228 @@
+@component('admin.components.page')
+    @slot('title','')
+
+
+   <!-- <div class="bg-white shadow-xs p-2 mb-4 rounded">
+        <div class="clearfix bg-light p-2 rounded d-flex align-items-center">
+							<span class="btn row-pill btn-sm bg-gradient-warning b-0 py-1 mb-0 float-start">
+								<i class="fi fi-round-info-full"></i>
+								Note
+							</span>
+            <span class="d-block px-2 text-muted text-truncate">
+								This is a basic demo! Please see main <a href="../../html_frontend/documentation/" target="smarty" class="link-muted">full documentation here</a>.
+							</span>
+        </div>
+    </div> -->
+    <div class="row gutters-sm">
+
+        <!-- start:col: -->
+        <div class="col-12 mb-3">
+
+            <!-- start:portlet -->
+            <div class="portlet">
+
+                <div class="portlet-header border-bottom">
+                    <span>{{__('Admins List')}}</span>
+                </div>
+
+                <div class="portlet-body">
+                    <div class="container py-6">
+
+
+
+
+                        <div class="card-header" style="width: auto">
+
+                            <button  onclick="delete_all()" class="js-ajax btn btn-sm btn-danger btn-pill px-2 py-1 fs--15  delBtn"><i class="fa fa-trash"></i> <span >{{__('Delete All')}}</span></button>
+                            <a href="{{route('admin.admin.create')}}" class="js-ajax btn btn-sm btn-success btn-pill px-2 py-1 fs--15"><i class="fa fa-plus"></i><span>{{__('Create')}}</span></a>
+                        </div>
+
+
+
+                        <form action="{{route('admin.admin.destroy_all')}}" id="form_data" class="d-inline" method="post">
+                            @csrf
+
+
+                            {{method_field('DELETE')}}
+
+
+
+                            <div class="table-responsive">
+                                <table class="table table-framed dataTable">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-gray-500 w--50">
+                                            <label class="form-checkbox form-checkbox-primary float-start">
+                                                <input type="checkbox" class="check_all" onclick="check_all()" />#
+                                                <i></i>
+                                            </label>
+                                        </th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--120"> </th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 min-w-300"> {{__('NAME')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--200"> {{__('EMAIL')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--120 text-center">{{__('Created_at')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--100 text-center">{{__('Updated_at')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--60 text-align-end">&nbsp;</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--60 text-align-end">&nbsp;</th>
+                                    </tr>
+                                    </thead>
+
+                                    <!-- #item_list used by checkall: data-checkall-container="#item_list" -->
+                                    <tbody id="item_list">
+                                    @if(isset($admins) && $admins->count()>0)
+                                    @foreach($admins as $admin)
+                                    <!-- product -->
+                                    <tr>
+                                        <!-- check item -->
+                                        <th>
+                                            <label class="form-checkbox form-checkbox-primary float-start">
+                                                <input type="checkbox" name="item[]" value="{{$admin->id}}" class="item_checkbox">
+                                                <i></i>
+                                            </label>
+                                        </th>
+
+                                        <!-- image -->
+                                           <td></td>
+                                        <!-- product name -->
+                                        <td>
+
+                                            {{$admin->name}}
+                                        </td>
+
+                                        <!-- price -->
+                                        <td>
+                                            {{$admin->email}}
+
+                                        </td>
+
+                                        <!-- brand -->
+                                        <td class="text-muted text-center">
+                                            {{$admin->created_at}}
+                                        </td>
+
+                                        <!-- status -->
+                                        <td class="text-center">
+                                            {{$admin->updated_at}}
+                                        </td>
+
+                                        <!-- options -->
+
+                                     <!--   <td>   <a href="{{route('admin.admin.show', $admin)}}" class="btn btn-sm btn-success"> {{__('Show')}}</a> </td> -->
+                                        <td>   <a href="{{route('admin.admin.edit', $admin)}}" class="js-ajax btn btn-sm btn-primary btn-pill px-2 py-1 fs--15">{{__('Edit')}}</a> </td>
+
+
+
+                                        <td>     <form action="{{route('admin.admin.destroy', $admin)}}" class="d-inline" method="post">
+                                                @csrf
+                                                {{method_field('DELETE')}}
+                                            </form>
+                                            <button onclick="delete_all()"  class="js-ajax btn btn-sm btn-danger btn-pill px-2 py-1 fs--15 btn-sm delBtn">{{__('Delete')}}</button>
+                                        </td>
+                                    </tr>
+
+                                    @endforeach
+                                    @endif
+                                    <!-- /product -->
+
+
+                                    <!-- product -->
+
+                                    <!-- /product -->
+
+                                    </tbody>
+
+                                 <!--   <tfoot>
+                                    <tr>
+                                        <th class="text-gray-500 w--50">
+                                            <label class="form-checkbox form-checkbox-primary float-start">
+                                                <input class="checkall" data-checkall-container="#item_list" type="checkbox" name="checkbox">
+                                                <i></i>
+                                            </label>
+                                        </th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--120"> </th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 min-w-300"> {{__('NAME')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--200"> {{__('EMAIL')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--120 text-center">{{__('Created_at')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--100 text-center">{{__('Updated_at')}}</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--60 text-align-end">&nbsp;</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--60 text-align-end">&nbsp;</th>
+                                        <th class="text-gray-500 font-weight-normal fs--14 w--60 text-align-end">&nbsp;</th>
+                                    </tr>
+                                    </tfoot> -->
+
+                                </table>
+                            </div>
+
+                        </form>
+
+
+
+
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- end:portlet -->
+
+        </div>
+        <!-- end:col: -->
+
+
+
+        <!-- start:col: -->
+
+        <!-- end:col: -->
+
+    </div>
+
+
+
+
+    <!-- Trigger the modal with a button -->
+   <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> -->
+
+    <!-- Modal -->
+    <div id="multi_delete" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                <!--    <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                    <h4 class="modal-title">{{__('Delete ALL')}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p> {{__('Are you sure to do this process for')}}</p>
+                    <span id="countn"></span> {{__('Item')}}
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{__('No')}}</button>
+                    <button type="submit" onsubmit=" " class="btn btn-danger btn_summit">{{__('Yes')}}</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    @push('script')
+        <script>
+
+            delete_all();
+            $('.btn_summit').change(function () {
+                $(this).parents('form').submit();
+            });
+
+
+
+
+
+        </script>
+    @endpush
+@endcomponent
